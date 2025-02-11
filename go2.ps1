@@ -4,7 +4,7 @@ param (
 
 # Check if URL is provided
 if (-not $url) {
-    Write-Host "Usage: .\yt-dlp-download.ps1 <URL>"
+    Write-Host "Usage: .\go2.ps1 <URL>"
     exit 1
 }
 
