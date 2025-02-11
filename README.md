@@ -1,5 +1,3 @@
-Here’s a detailed **report** on the provided PowerShell script, including **syntax analysis**, **potential issues**, and **comments explaining the functionality and usage of each part**. The script is designed to download audio from a URL using `yt-dlp`, extract metadata, and process the audio file into chapters or a single track using `ffmpeg`.
-
 ---
 
 ### **Script Report**
@@ -301,5 +299,3 @@ Write-Host "Processing complete! Files saved in '$outputDir' directory."
 - Make paths configurable for flexibility.
 
 ---
-
-This script is well-structured and functional but could benefit from the above improvements. Let me know if you need further assistance!
