@@ -40,10 +40,10 @@ $extractedFileJson = $extractedFile -replace '\.opus$', '.info.json'
 
 
 # Output the extracted file names
-Write-Host "JSON Metadata File: $jsonFile"
-Write-Host "Downloaded File: $downloadFile"
-Write-Host "Extracted Audio File: $extractedFile"
-Write-Host "Extracted Audio File Json: $extractedFileJson"
+# Write-Host "JSON Metadata File: $jsonFile"
+# Write-Host "Downloaded File: $downloadFile"
+# Write-Host "Extracted Audio File: $extractedFile"
+# Write-Host "Extracted Audio File Json: $extractedFileJson"
 
 
 #combining the first script
