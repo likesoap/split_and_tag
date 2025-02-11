@@ -159,8 +159,8 @@ if ($jsonContent.PSObject.Properties.Name -contains "chapters") {
 
     # Debugging: Print file details
     Write-Host "Processing single track:"
-    Write-Host "  Title: $title"
-    Write-Host "  Safe Title: $safeTitle"
+    # Write-Host "  Title: $title"
+    # Write-Host "  Safe Title: $safeTitle"
     Write-Host "  Output: $outputFile"
 
     # Run ffmpeg to add metadata to the entire file
@@ -173,7 +173,7 @@ if ($jsonContent.PSObject.Properties.Name -contains "chapters") {
                      "-metadata track='1/1' " +
                      "-loglevel error " +
                      "`"$outputFile`""
-    Write-Host "Executing: $ffmpegCommand"
+    # Write-Host "Executing: $ffmpegCommand"
     Invoke-Expression -Command $ffmpegCommand
 
     # Check if ffmpeg succeeded
