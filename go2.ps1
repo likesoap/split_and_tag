@@ -171,7 +171,7 @@ if ($jsonContent.PSObject.Properties.Name -contains "chapters") {
                      "-metadata album='$album' " +
                      "-metadata artist='$artist' " +
                      "-metadata track='1/1' " +
-                     "-loglevel eror " +
+                     "-loglevel error " +
                      "`"$outputFile`""
     Write-Host "Executing: $ffmpegCommand"
     Invoke-Expression -Command $ffmpegCommand
