@@ -1,5 +1,3 @@
----
-
 ### **Script Report**
 
 #### **1. Script Overview**
@@ -298,4 +296,3 @@ Write-Host "Processing complete! Files saved in '$outputDir' directory."
 - Add logging to a file for debugging purposes.
 - Make paths configurable for flexibility.
 
----
