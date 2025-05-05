@@ -10,7 +10,7 @@ $videoURL = $args[0]
 # Define the yt-dlp command with the provided configuration
 $ytdlpCommand = @(
     "yt-dlp", # The command to run yt-dlp
-    "--ffmpeg-location `"C:\\ProgramData\\chocolatey\\bin\\ffmpeg.exe`"", # Specifies the path to ffmpeg.exe for post-processing
+    "--ffmpeg-location `"D:\\ffmpeg-7.1.1-essentials_build\\bin\\ffmpeg.exe`"", # Specifies the path to ffmpeg.exe for post-processing
     "-f `"bv*[height<=1080]+ba`"", # Video format selection: best video up to 1080p + best audio
     "--yes-playlist", # Automatically downloads all videos in a playlist if the URL is a playlist
     "--sub-langs all", # Downloads all available subtitles for the video
