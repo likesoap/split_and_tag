@@ -46,7 +46,7 @@ album=$(jq -r '.fulltitle' "$extracted_file_json")
 artist=$(jq -r '.uploader' "$extracted_file_json")
 
 # Create output directory
-output_dir="./processed/$album"
+output_dir="./processed/"
 mkdir -p "$output_dir"
 
 # Function to convert a name to a safe filename
