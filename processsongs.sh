@@ -3,12 +3,13 @@
 # Create output directory
 output_dir="processed"
 
-required_cmds=("jq" "ffmpeg")
-
+# fix error parts in file names
 sanitize_metadata() {
     echo "$1" | iconv -c -f UTF-8 -t ASCII//TRANSLIT | tr -cd '[:alnum:]._ -'
 }
 
+#check if all dependencies are good
+required_cmds=("jq" "ffmpeg")
 for cmd in "${required_cmds[@]}"; do
     if ! command -v "$cmd" &>/dev/null; then
         echo "Error: '$cmd' is required but not installed." >&2
@@ -16,26 +17,26 @@ for cmd in "${required_cmds[@]}"; do
     fi
 done
 
-# Quote the variable to preserve line breaks (handles filenames with spaces)
+# process the source files
 while IFS= read -r name; do
-    extracted_file_json="${name}.info.json"
-    extracted_file="${name}.opus"
+    meta_json="${name}.info.json"
+    source_file="${name}.opus"
 
     # Check if the associated .opus file exists
-    if [[ ! -f "$extracted_file" ]]; then
+    if [[ ! -f "$source_file" ]]; then
         echo "Warning: Missing audio file for '$name'. Skipping..."
         continue
     fi
 
-    # Read JSON file content using jq safely
-    album=$(jq -r '.playlist_title // "Unknown Album"' "$extracted_file_json")
-    artist=$(jq -r '.artists[0] // "Unknown Artist"' "$extracted_file_json")
-    track_number=$(jq -r '.playlist_index // 0' "$extracted_file_json")
-    title=$(jq -r '.title // "Unknown Title"' "$extracted_file_json")
+    # prepare meta data
+    album=$(jq -r '.playlist_title // "Unknown Album"' "$meta_json")
+    artist=$(jq -r '.artists[0] // "Unknown Artist"' "$meta_json")
+    track_number=$(jq -r '.playlist_index // 0' "$meta_json")
+    title=$(jq -r '.title // "Unknown Title"' "$meta_json")
 
     #define output path and filenames, removing the non regonizable characters
     target_dir="./${output_dir}/$(sanitize_metadata "$album")"
-    output_file="$target_dir/$(sanitize_metadata "$name").opus"
+    target_file="$target_dir/$(sanitize_metadata "$name").opus"
 
     # check if target dir exists
     if [ ! -d "$target_dir" ]; then
@@ -43,8 +44,8 @@ while IFS= read -r name; do
         mkdir -p "$target_dir"
 
     # Skip if output file already exists
-    elif [[ ! -f "$output_file" ]]; then
-        ffmpeg -y -i "$extracted_file" -c copy \
+    elif [[ ! -f "$target_file" ]]; then
+        ffmpeg -y -i "$source_file" -c copy \
             -id3v2_version 3 \
             -hide_banner \
             -metadata title="$title" \
@@ -52,7 +53,7 @@ while IFS= read -r name; do
             -metadata artist="$artist" \
             -metadata track="$track_number" \
             -loglevel error \
-            "$output_file"
+            "$target_file"
     else
         echo "Skipping '$outfileName' — already exists."
         continue
