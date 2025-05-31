@@ -16,7 +16,7 @@ ytdlp_output=$(yt-dlp \
     --audio-quality 0 \
     --write-info-json \
     -o "%(title)s.%(ext)s" \
-    -P "/home/$USER/Downloads/yt/music/" \
+    -P "./" \
     --retries 10 \
     --cookies-from-browser firefox \
     --no-overwrites \
