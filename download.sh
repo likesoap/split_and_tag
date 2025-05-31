@@ -27,6 +27,7 @@ url="$1"
 ytdlp_output=(yt-dlp \
     -f "bestaudio" \
     --extract-audio \
+    --restrict-filenames \
     --yes-playlist \
     --audio-quality 0 \
     --write-info-json \
