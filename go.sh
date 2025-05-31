@@ -6,6 +6,19 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
+
+#check for dependency
+required_cmds=("yt-dlp" "jq" "ffmpeg")
+
+for cmd in "${required_cmds[@]}"; do
+    if ! command -v "$cmd" &>/dev/null; then
+        echo "Error: '$cmd' is required but not installed." >&2
+        exit 1
+    fi
+done
+
+#main body
+
 url="$1"
 
 # Define yt-dlp command with configurations
@@ -33,7 +46,7 @@ album=$(jq -r '.fulltitle' "$extracted_file_json")
 artist=$(jq -r '.uploader' "$extracted_file_json")
 
 # Create output directory
-output_dir="./processed"
+output_dir="./processed/$album"
 mkdir -p "$output_dir"
 
 # Function to convert a name to a safe filename
