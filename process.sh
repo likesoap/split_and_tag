@@ -22,7 +22,7 @@ for cmd in "${required_cmds[@]}"; do
     fi
 done
 
-# process the source files
+# wrap the entire flow in a big while and if clause
 while IFS= read -r name; do
     meta_json="${name}.info.json"
     source_file="${name}.${output_format}"
