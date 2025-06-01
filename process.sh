@@ -66,8 +66,12 @@ while IFS= read -r name; do
                     -metadata album="$chapter_album" \
                     -metadata artist="$chapter_artist" \
                     -metadata track="$chapter_track_number" \
+                    -loglevel 0 \
+                    -nostats \
                     "$chapter_song_target_file"
             fi
+            echo "Processing complete! Check new files in '$chapter_song_target_file'."
+
         done
     else
         album=$(jq -r '.playlist_title // "Unknown Album"' "$meta_json")
@@ -90,17 +94,19 @@ while IFS= read -r name; do
             continue
         else
             echo "Processing: $target_file"
-            ffmpeg -y -i "$source_file" -c copy \
+            ffmpeg -y -i "$source_file" -loglevel 0 \
+                -nostats \
+                -c copy \
                 -id3v2_version 3 \
                 -hide_banner \
                 -metadata title="$title" \
                 -metadata album="$album" \
                 -metadata artist="$artist" \
                 -metadata track="$track_number" \
-                -v panic \
-                -nostats \
                 "$target_file"
         fi
-        echo "Processing complete! Files saved in '$target_file'."
+        echo "Processing complete! Check new files in '$target_file'."
+
     fi
+
 done < <(find . -type f -name "*.info.json" -exec basename {} .info.json \;)
