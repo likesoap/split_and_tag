@@ -1,17 +1,17 @@
 #!/bin/bash
 
 # this part is suggested by Chatgpt, I dont know the detail
-set -euo pipefail
-IFS=$'\n\t'
+# set -euo pipefail
+# IFS=$'\n\t'
 
 # Create output directory
 output_dir="processed"
 output_format="opus"
 
-# # fix error parts in file names
-# sanitize_metadata() {
-#     echo "$1" | iconv -c -f UTF-8 -t ASCII//TRANSLIT | tr -cd '[:alnum:]._ -'
-# }
+# fix error parts in file names
+sanitize_metadata() {
+    echo "$1" | iconv -c -f UTF-8 -t ASCII//TRANSLIT | tr -cd '[:alnum:]._ -'
+}
 
 #check if all dependencies are good
 required_cmds=("jq" "ffmpeg")
@@ -45,10 +45,10 @@ while IFS= read -r name; do
             chapter_title=$(jq -r --argjson i "$i" '.chapters[$i].title // "Unknown Title"' "$meta_json")
             chapter_track_number=$((i + 1))
 
-            # safe_album=$(sanitize_metadata "$chapter_album")
-            # safe_title=$(sanitize_metadata "$chapter_title")
-            chapter_song_target_dir="./${output_dir}/${chapter_album}"
-            chapter_song_target_file="$chapter_song_target_dir/${chapter_title}.${output_format}"
+            safe_album=$(sanitize_metadata "$chapter_album")
+            safe_title=$(sanitize_metadata "$chapter_title")
+            chapter_song_target_dir="./${output_dir}/${safe_album}"
+            chapter_song_target_file="$chapter_song_target_dir/${safe_title}.${output_format}"
 
             if [[ ! -d "$chapter_song_target_dir" ]]; then
                 echo "Directory does not exist. Creating: $chapter_song_target_dir"
@@ -79,10 +79,10 @@ while IFS= read -r name; do
         track_number=$(jq -r '.playlist_index // 0' "$meta_json")
         title=$(jq -r '.title // "Unknown Title"' "$meta_json")
 
-        # safe_album=$(sanitize_metadata "$album")
-        # safe_name=$(sanitize_metadata "$name")
-        target_dir="./${output_dir}/${album}"
-        target_file="$target_dir/${name}.${output_format}"
+        safe_album=$(sanitize_metadata "$album")
+        safe_name=$(sanitize_metadata "$name")
+        target_dir="./${output_dir}/${safe_album}"
+        target_file="$target_dir/${safe_name}.${output_format}"
 
         if [[ ! -d "$target_dir" ]]; then
             echo "Directory does not exist. Creating: $target_dir"
