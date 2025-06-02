@@ -8,8 +8,6 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-download_path=/home/lin/Downloads/ytt
-
 #check for dependency
 required_cmds=("yt-dlp" "jq" "ffmpeg")
 
