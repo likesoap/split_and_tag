@@ -8,6 +8,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
+download_path=/home/lin/Downloads/ytt
 
 #check for dependency
 required_cmds=("yt-dlp" "jq" "ffmpeg")
@@ -32,7 +33,7 @@ ytdlp_output=(yt-dlp \
     --audio-quality 0 \
     --write-info-json \
     -o "%(title)s.%(ext)s" \
-    -P "./" \
+    -P "${download_path}" \
     --retries 10 \
     --cookies-from-browser firefox \
     --no-overwrites \
