@@ -5,9 +5,11 @@ import json
 import math
 import subprocess
 import re
+import shutil
 
 output_dir = "output"
 output_format = "opus"
+processed_dir = "processed"
 
 
 def sanitize_metadata(text):
@@ -98,6 +100,18 @@ for root, dirs, files in os.walk("."):
                     print(
                         f"✅ Processing complete! Saved: {chapter_song_target_file}"
                     )
+                    os.makedirs(processed_dir, exist_ok=True)
+                    destination_audio_path = os.path.join(
+                        processed_dir, os.path.basename(audio_file))
+                    destination_json_path = os.path.join(
+                        processed_dir, os.path.basename(json_file))
+                    if os.path.exists(destination_json_path):
+                        os.remove(destination_json_path)
+                    if os.path.exists(destination_audio_path):
+                        os.remove(destination_audio_path)
+                    shutil.move(audio_file, processed_dir)
+                    shutil.move(json_file, processed_dir)
+                    print(f"🆒Moved '{name}' to '{processed_dir}'")
             else:
                 # Fallback: single track file
                 album = data.get("playlist_title",
@@ -144,4 +158,18 @@ for root, dirs, files in os.walk("."):
 
                 subprocess.run(cmd, check=True)
                 print(f"✅ Processing complete! Saved: {song_target_file}")
+
+                #make sure the processed path is there
+                os.makedirs(processed_dir, exist_ok=True)
+                destination_audio_path = os.path.join(
+                    processed_dir, os.path.basename(audio_file))
+                destination_json_path = os.path.join(
+                    processed_dir, os.path.basename(json_file))
+                if os.path.exists(destination_json_path):
+                    os.remove(destination_json_path)
+                if os.path.exists(destination_audio_path):
+                    os.remove(destination_audio_path)
+                shutil.move(audio_file, processed_dir)
+                shutil.move(json_file, processed_dir)
+                print(f"🆒Moved '{name}' to '{processed_dir}'")
     break
