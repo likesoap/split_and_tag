@@ -100,17 +100,27 @@ for root, dirs, files in os.walk("."):
                     print(
                         f"✅ Processing complete! Saved: {chapter_song_target_file}"
                     )
+
+                    #make sure ./processed is created
                     os.makedirs(processed_dir, exist_ok=True)
+
+                    #constructing destination for moving the source files
                     destination_audio_path = os.path.join(
                         processed_dir, os.path.basename(audio_file))
                     destination_json_path = os.path.join(
                         processed_dir, os.path.basename(json_file))
+
+                    #remove destination files if duplicates
                     if os.path.exists(destination_json_path):
                         os.remove(destination_json_path)
                     if os.path.exists(destination_audio_path):
                         os.remove(destination_audio_path)
+
+                    #move the fukcing fiels
                     shutil.move(audio_file, processed_dir)
                     shutil.move(json_file, processed_dir)
+
+                    #show the files are moved
                     print(f"🆒Moved '{name}' to '{processed_dir}'")
             else:
                 # Fallback: single track file
@@ -161,15 +171,23 @@ for root, dirs, files in os.walk("."):
 
                 #make sure the processed path is there
                 os.makedirs(processed_dir, exist_ok=True)
+
+                #constructing destination for moving the source files
                 destination_audio_path = os.path.join(
                     processed_dir, os.path.basename(audio_file))
                 destination_json_path = os.path.join(
                     processed_dir, os.path.basename(json_file))
+
+                #remove destination files if duplicates
                 if os.path.exists(destination_json_path):
                     os.remove(destination_json_path)
                 if os.path.exists(destination_audio_path):
                     os.remove(destination_audio_path)
+
+                #move the fukcing fiels
                 shutil.move(audio_file, processed_dir)
                 shutil.move(json_file, processed_dir)
+
+                #show the files are moved
                 print(f"🆒Moved '{name}' to '{processed_dir}'")
     break
