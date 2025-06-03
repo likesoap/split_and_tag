@@ -19,12 +19,46 @@ def sanitize_metadata(text):
 # entries = os.listdir(".")
 # files = [f for f in entries if os.path.isfile(f)]
 
+
+def move_files_to_processed(audio_file, json_file, processed_dir, name=None):
+    """
+    Moves the specified audio and JSON files to the processed directory.
+    
+    Parameters:
+    - audio_file (str): Path to the audio file.
+    - json_file (str): Path to the JSON file.
+    - processed_dir (str): Directory where the files should be moved.
+    - name (str, optional): Name to display in the status message.
+    """
+    os.makedirs(processed_dir, exist_ok=True)
+
+    destination_audio_path = os.path.join(processed_dir,
+                                          os.path.basename(audio_file))
+    destination_json_path = os.path.join(processed_dir,
+                                         os.path.basename(json_file))
+
+    # Remove existing destination files if duplicates
+    if os.path.exists(destination_audio_path):
+        os.remove(destination_audio_path)
+    if os.path.exists(destination_json_path):
+        os.remove(destination_json_path)
+
+    # Move the files
+    shutil.move(audio_file, processed_dir)
+    shutil.move(json_file, processed_dir)
+
+    # Status message
+    display_name = name or os.path.basename(audio_file)
+    print(f"🆒 Moved '{display_name}' to '{processed_dir}'")
+
+
 for root, dirs, files in os.walk("."):
     for file in files:
         if file.endswith(".info.json"):
             name = file.removesuffix(".info.json")
             json_file = os.path.join(root, f"{name}.info.json")
-            audio_file = os.path.join(root, f"{name}.opus")
+            opus_file = os.path.join(root, f"{name}.opus")
+            m4a_file = os.path.join(root, f"{name}.m4a")
 
             try:
                 with open(json_file, "r", encoding="utf-8") as f:
@@ -35,8 +69,12 @@ for root, dirs, files in os.walk("."):
                 )
                 continue
 
-            if not os.path.isfile(audio_file):
-                print(f"Warning: Missing audio file for '{name}'. Skipping...")
+            if os.path.exists(opus_file):
+                audio_file = opus_file
+            else:
+                print(
+                    f"❌Warning: Missing audio file / Unsupported format for '{name}'. Skipping..."
+                )
                 continue
 
             if "chapters" in data and data["chapters"]:
@@ -65,6 +103,8 @@ for root, dirs, files in os.walk("."):
                         print(
                             f"Skipping existing file: {chapter_song_target_file}"
                         )
+                        move_files_to_processed(audio_file, json_file,
+                                                processed_dir, name)
                         continue
 
                     os.makedirs(chapter_song_target_dir, exist_ok=True)
@@ -101,27 +141,8 @@ for root, dirs, files in os.walk("."):
                         f"✅ Processing complete! Saved: {chapter_song_target_file}"
                     )
 
-                    #make sure ./processed is created
-                    os.makedirs(processed_dir, exist_ok=True)
-
-                    #constructing destination for moving the source files
-                    destination_audio_path = os.path.join(
-                        processed_dir, os.path.basename(audio_file))
-                    destination_json_path = os.path.join(
-                        processed_dir, os.path.basename(json_file))
-
-                    #remove destination files if duplicates
-                    if os.path.exists(destination_json_path):
-                        os.remove(destination_json_path)
-                    if os.path.exists(destination_audio_path):
-                        os.remove(destination_audio_path)
-
-                    #move the fukcing fiels
-                    shutil.move(audio_file, processed_dir)
-                    shutil.move(json_file, processed_dir)
-
-                    #show the files are moved
-                    print(f"🆒Moved '{name}' to '{processed_dir}'")
+                    move_files_to_processed(audio_file, json_file,
+                                            processed_dir, name)
             else:
                 # Fallback: single track file
                 album = data.get("playlist_title",
@@ -169,25 +190,6 @@ for root, dirs, files in os.walk("."):
                 subprocess.run(cmd, check=True)
                 print(f"✅ Processing complete! Saved: {song_target_file}")
 
-                #make sure the processed path is there
-                os.makedirs(processed_dir, exist_ok=True)
-
-                #constructing destination for moving the source files
-                destination_audio_path = os.path.join(
-                    processed_dir, os.path.basename(audio_file))
-                destination_json_path = os.path.join(
-                    processed_dir, os.path.basename(json_file))
-
-                #remove destination files if duplicates
-                if os.path.exists(destination_json_path):
-                    os.remove(destination_json_path)
-                if os.path.exists(destination_audio_path):
-                    os.remove(destination_audio_path)
-
-                #move the fukcing fiels
-                shutil.move(audio_file, processed_dir)
-                shutil.move(json_file, processed_dir)
-
-                #show the files are moved
-                print(f"🆒Moved '{name}' to '{processed_dir}'")
+                move_files_to_processed(audio_file, json_file, processed_dir,
+                                        name)
     break
