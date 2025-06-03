@@ -1,6 +1,9 @@
 #!/bin/bash
 
+# ensure the script could handle unicode
 # this part is suggested by Chatgpt, I dont know the detail
+export LC_All=en_US.UTF-8
+
 # set -euo pipefail
 # IFS=$'\n\t'
 
@@ -10,8 +13,13 @@ output_format="opus"
 
 # fix error parts in file names
 sanitize_metadata() {
+    # echo "$(printf "%s" "$1" | xxd -plain | sed 's/../& /g' | awk '{for(i=1;i<=NF;i++) printf "%%%s", $i; print ""}')"
     echo "$1" | iconv -c -f UTF-8 -t ASCII//TRANSLIT | tr -cd '[:alnum:]._ -'
 }
+
+# Encode to hex with % escaping
+
+
 
 #check if all dependencies are good
 required_cmds=("jq" "ffmpeg")
