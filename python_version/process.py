@@ -9,8 +9,10 @@ import re
 output_dir = "output"
 output_format = "opus"
 
+
 def sanitize_metadata(text):
     return re.sub(r'[\\/:"*?<>|]', "_", text).strip()
+
 
 for root, dirs, files in os.walk("."):
     for file in files:
@@ -47,8 +49,7 @@ for root, dirs, files in os.walk("."):
 
                     chapter_song_target_dir = os.path.join(output_dir, safe_album)
                     chapter_song_target_file = os.path.join(
-                        chapter_song_target_dir,
-                        f"{safe_title}.{output_format}"
+                        chapter_song_target_dir, f"{safe_title}.{output_format}"
                     )
 
                     if os.path.isfile(chapter_song_target_file):
@@ -60,16 +61,26 @@ for root, dirs, files in os.walk("."):
                     cmd = [
                         "ffmpeg",
                         "-y",
-                        "-ss", str(chapter_start),
-                        "-i", audio_file,
-                        "-to", str(chapter_end),
-                        "-c", "copy",
-                        "-id3v2_version", "3",
-                        "-metadata", f"title={chapter_title}",
-                        "-metadata", f"album={chapter_album}",
-                        "-metadata", f"artist={chapter_artist}",
-                        "-metadata", f"track={chapter_track_number}",
-                        "-loglevel", "quiet",
+                        "-ss",
+                        str(chapter_start),
+                        "-i",
+                        audio_file,
+                        "-to",
+                        str(chapter_end),
+                        "-c",
+                        "copy",
+                        "-id3v2_version",
+                        "3",
+                        "-metadata",
+                        f"title={chapter_title}",
+                        "-metadata",
+                        f"album={chapter_album}",
+                        "-metadata",
+                        f"artist={chapter_artist}",
+                        "-metadata",
+                        f"track={chapter_track_number}",
+                        "-loglevel",
+                        "quiet",
                         "-nostats",
                         chapter_song_target_file,
                     ]
@@ -88,8 +99,7 @@ for root, dirs, files in os.walk("."):
 
                 chapter_song_target_dir = os.path.join(output_dir, safe_album)
                 chapter_song_target_file = os.path.join(
-                    chapter_song_target_dir,
-                    f"{safe_title}.{output_format}"
+                    chapter_song_target_dir, f"{safe_title}.{output_format}"
                 )
 
                 if os.path.isfile(chapter_song_target_file):
@@ -101,14 +111,22 @@ for root, dirs, files in os.walk("."):
                 cmd = [
                     "ffmpeg",
                     "-y",
-                    "-i", audio_file,
-                    "-c", "copy",
-                    "-id3v2_version", "3",
-                    "-metadata", f"title={safe_title}",
-                    "-metadata", f"album={safe_album}",
-                    "-metadata", f"artist={artist}",
-                    "-metadata", f"track={track_number}",
-                    "-loglevel", "quiet",
+                    "-i",
+                    audio_file,
+                    "-c",
+                    "copy",
+                    "-id3v2_version",
+                    "3",
+                    "-metadata",
+                    f"title={safe_title}",
+                    "-metadata",
+                    f"album={safe_album}",
+                    "-metadata",
+                    f"artist={artist}",
+                    "-metadata",
+                    f"track={track_number}",
+                    "-loglevel",
+                    "quiet",
                     "-nostats",
                     chapter_song_target_file,
                 ]
