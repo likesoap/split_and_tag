@@ -95,7 +95,9 @@ for root, dirs, files in os.walk("."):
                     ]
 
                     subprocess.run(cmd, check=True)
-
+                    print(
+                        f"✅ Processing complete! Saved: {chapter_song_target_file}"
+                    )
             else:
                 # Fallback: single track file
                 album = data.get("playlist_title",
@@ -107,16 +109,15 @@ for root, dirs, files in os.walk("."):
                 safe_album = sanitize_metadata(album)
                 safe_title = sanitize_metadata(title)
 
-                chapter_song_target_dir = os.path.join(output_dir, safe_album)
-                chapter_song_target_file = os.path.join(
-                    chapter_song_target_dir, f"{safe_title}.{output_format}")
+                song_target_dir = os.path.join(output_dir, safe_album)
+                song_target_file = os.path.join(
+                    song_target_dir, f"{safe_title}.{output_format}")
 
-                if os.path.isfile(chapter_song_target_file):
-                    print(
-                        f"Skipping existing file: {chapter_song_target_file}")
+                if os.path.isfile(song_target_file):
+                    print(f"Skipping existing file: {song_target_file}")
                     continue
 
-                os.makedirs(chapter_song_target_dir, exist_ok=True)
+                os.makedirs(song_target_dir, exist_ok=True)
 
                 cmd = [
                     "ffmpeg",
@@ -138,11 +139,9 @@ for root, dirs, files in os.walk("."):
                     "-loglevel",
                     "quiet",
                     "-nostats",
-                    chapter_song_target_file,
+                    song_target_file,
                 ]
 
                 subprocess.run(cmd, check=True)
-                print(
-                    f"✅ Processing complete! Saved: {chapter_song_target_file}"
-                )
+                print(f"✅ Processing complete! Saved: {song_target_file}")
     break
