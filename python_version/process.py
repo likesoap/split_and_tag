@@ -103,8 +103,8 @@ for root, dirs, files in os.walk("."):
                         print(
                             f"Skipping existing file: {chapter_song_target_file}"
                         )
-                        move_files_to_processed(audio_file, json_file,
-                                                processed_dir, name)
+                        # move_files_to_processed(audio_file, json_file,
+                        #                         processed_dir, name)
                         continue
 
                     os.makedirs(chapter_song_target_dir, exist_ok=True)
@@ -141,8 +141,8 @@ for root, dirs, files in os.walk("."):
                         f"✅ Processing complete! Saved: {chapter_song_target_file}"
                     )
 
-                    move_files_to_processed(audio_file, json_file,
-                                            processed_dir, name)
+                    # move_files_to_processed(audio_file, json_file,
+                    #                         processed_dir, name)
             else:
                 # Fallback: single track file
                 album = data.get("playlist_title",
@@ -190,6 +190,6 @@ for root, dirs, files in os.walk("."):
                 subprocess.run(cmd, check=True)
                 print(f"✅ Processing complete! Saved: {song_target_file}")
 
-                move_files_to_processed(audio_file, json_file, processed_dir,
-                                        name)
+                # move_files_to_processed(audio_file, json_file, processed_dir,
+                #                         name)
     break
